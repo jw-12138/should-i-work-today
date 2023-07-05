@@ -182,6 +182,10 @@ async function makeResponse() {
 
 router.all('*', preflight)
 
+router.get('/', () => {
+  return Response.redirect('https://github.com/jw-12138/should-i-work-today', 301)
+})
+
 router.get('/api/v1', async () => {
   let res = await makeResponse()
 
