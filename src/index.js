@@ -182,10 +182,6 @@ async function makeResponse() {
 
 router.all('*', preflight)
 
-router.get('/', () => {
-  return new Response('Hello there!')
-})
-
 router.get('/api/v1', async () => {
   let res = await makeResponse()
 
