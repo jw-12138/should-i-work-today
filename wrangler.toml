@@ -1,0 +1,3 @@
+name = "should-i-work-today"
+main = "src/index.js"
+compatibility_date = "2023-05-18"
