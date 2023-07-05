@@ -4,21 +4,22 @@ const router = Router()
 const {preflight, corsify} = createCors()
 
 const at_work_sentences = [
-  '「国粹」',
+  '艹',
   '要不删库跑路吧',
-  '让我写js，还是让我去死，这是个问题',
+  '工作，还是摸鱼，这是个问题',
   '今天摸哪里的鱼呢',
   '生产队的驴休息了吗？',
   '今天应该不加班了吧',
-  '这个bug怎么就解决不了呢',
-  '工作太苦，我想吃点甜的',
-  '代码提交了，先去搞杯咖啡',
+  '这个逼班真的上不下去',
+  '工作很苦，她很甜',
+  '先去搞杯咖啡',
   '有人看见我的电脑了吗',
   '这个需求真的实现不了',
   '好累啊',
   '还有几天放假呢？',
   '同事们都好厉害，我好菜啊',
-  '我发誓这代码昨天还是好好的'
+  '我发誓这代码昨天还是好好的',
+  '要不还是先去拉个屎？'
 ]
 
 const at_home_sentences = [
@@ -60,40 +61,63 @@ async function getOffDays(year) {
     thisYearOffDays = await fetch('https://cdn.jsdelivr.net/gh/NateScarlet/holiday-cn@master/' + year + '.json')
   } catch (e) {
     console.log(e)
-    throw new Error('获取节假日失败')
+    throw `获取${year}年节假日失败`
+  }
+
+  if (thisYearOffDays.status !== 200) {
+    throw new Error(`获取${year}年节假日失败`)
+  }
+
+  let thisYearOffDaysJson
+  try {
+    thisYearOffDaysJson = await thisYearOffDays.json()
+  } catch (e) {
+    console.log(e)
+    throw `获取${year}年节假日失败`
   }
 
   let nextYearOffDays = null
   try {
     nextYearOffDays = await fetch('https://cdn.jsdelivr.net/gh/NateScarlet/holiday-cn@master/' + nextYear + '.json')
   } catch (e) {
-    console.log(e)
-    throw new Error('获取节假日失败')
+    throw `获取${nextYear}年节假日失败`
   }
 
-  let thisYearOffDaysJson = await thisYearOffDays.json()
-  let nextYearOffDaysJson = await nextYearOffDays.json()
+  if (nextYearOffDays.status !== 200) {
+    throw new Error(`获取${nextYear}年节假日失败`)
+  }
+
+  let nextYearOffDaysJson
+
+  try {
+    nextYearOffDaysJson = await nextYearOffDays.json()
+  } catch (e) {
+    console.log(e)
+    return error(500, {
+      error: `获取${nextYear}年节假日失败`
+    })
+  }
 
   return thisYearOffDaysJson.days.concat(nextYearOffDaysJson.days)
 }
 
 async function getRealTime() {
-  let time = ''
-  try {
-    time = await fetch('https://worldtimeapi.org/api/timezone/Asia/Shanghai')
-  } catch (e) {
-    console.log(e)
-    throw new Error('获取时间失败')
-  }
+  let timestamp = Date.now()
+  let timeObj = new Date(timestamp)
 
-  return await time.json()
+  let timeText = timeObj.toLocaleString('cn-ZH', {
+    timeZone: 'Asia/Shanghai'
+  })
+
+  return {
+    datetime: timeText
+  }
 }
 
 async function makeResponse() {
   // get time
   console.log('getting time ...')
   let time = await getRealTime()
-  console.log(time)
 
   // get date object from time
   let dateObj = new Date(time.datetime)
@@ -128,24 +152,28 @@ async function makeResponse() {
     } else {
       // weekday
       console.log('weekday')
-      resText = 'another day in the office'
+      resText = 'weekday'
       shouldIWork = true
     }
   } else if (typeof todayIsOffDay === 'boolean') {
     if (todayIsOffDay) {
       // play some games, Zelda maybe?
       console.log('off day, should be home')
-      resText = 'off day'
+      resText = 'off_day'
       shouldIWork = false
     } else {
       // should be at work, :)
       console.log('not off day, should be at work')
-      resText = 'not off day'
+      resText = 'not_off_day'
       shouldIWork = true
     }
   }
 
   return {
+    requestTime: {
+      text: time.datetime,
+      timestamp: Date.parse(time.datetime)
+    },
     todayIs: resText,
     shouldIWorkToday: shouldIWork,
     desc: getRandomSentence(shouldIWork)

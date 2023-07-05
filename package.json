@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "wrangler dev --port 4011"
+    "dev": "wrangler dev --port 4011",
+    "deploy": "wrangler deploy"
   },
   "dependencies": {
     "itty-router": "^4.0.13"
