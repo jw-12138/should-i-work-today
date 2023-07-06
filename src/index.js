@@ -75,7 +75,7 @@ async function getOffDays(year) {
   }
 
   if (thisYearOffDays.status !== 200) {
-    throw new Error(`获取${year}年节假日失败`)
+    throw `获取${year}年节假日失败`
   }
 
   let thisYearOffDaysJson
@@ -90,11 +90,12 @@ async function getOffDays(year) {
   try {
     nextYearOffDays = await fetch('https://cdn.jsdelivr.net/gh/NateScarlet/holiday-cn@master/' + nextYear + '.json')
   } catch (e) {
+    console.log(e)
     throw `获取${nextYear}年节假日失败`
   }
 
   if (nextYearOffDays.status !== 200) {
-    throw new Error(`获取${nextYear}年节假日失败`)
+    throw `获取${nextYear}年节假日失败`
   }
 
   let nextYearOffDaysJson
@@ -103,9 +104,7 @@ async function getOffDays(year) {
     nextYearOffDaysJson = await nextYearOffDays.json()
   } catch (e) {
     console.log(e)
-    return error(500, {
-      error: `获取${nextYear}年节假日失败`
-    })
+    throw `获取${nextYear}年节假日失败`
   }
 
   return thisYearOffDaysJson.days.concat(nextYearOffDaysJson.days)
@@ -131,12 +130,12 @@ async function makeResponse(type) {
 
   let timestamp = Date.parse(time.datetime)
 
-  if(type === 'tomorrow'){
+  if (type === 'tomorrow') {
     // add one day to timestamp
     timestamp += 1000 * 60 * 60 * 24
   }
 
-  // get date object from time
+  // get date object from timestamp
   let dateObj = new Date(timestamp)
 
   // get full year
