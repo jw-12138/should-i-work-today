@@ -6,9 +6,17 @@
 
 API 地址：
 
-```http request
-GET https://siwt.jw1.dev/api/v1
-```
+- 今儿上班吗
+
+  ```http request
+  GET https://siwt.jw1.dev/api/v1
+  ```
+  
+- 明儿上班吗
+
+  ```http request
+  GET https://siwt.jw1.dev/api/v1/tomorrow
+  ```
 
 是的你没有看错，**什么参数都不用传**！服务端也已开启跨域！
 
@@ -17,37 +25,72 @@ GET https://siwt.jw1.dev/api/v1
 - 上班
   ```json
   {
-    "requestTime": "<请求时间>",
+    "requestTime": {
+      "text": "2023/7/6 10:36:45",
+      "timestamp": 1688611005000
+    },
+    "requestedDate": {
+      "timestamp": 1688697405000,
+      "day": "星期五",
+      "text": "2023/7/7 10:36:45"
+    },
     "todayIs": "weekday",
     "shouldIWorkToday": true,
-    "desc": "要不删库跑路吧"
+    "desc": "好累啊"
   }
   ```
+  
 - 周末
   ```json
   {
-    "requestTime": "<请求时间>",
+    "requestTime": {
+      "text": "2023/7/6 10:38:28",
+      "timestamp": 1688611108000
+    },
+    "requestedDate": {
+      "timestamp": 1688783908000,
+      "day": "星期六",
+      "text": "2023/7/8 10:38:28"
+    },
     "todayIs": "weekend",
     "shouldIWorkToday": false,
     "desc": "搞杯朗姆吃吃吧"
   }
   ```
+  
 - 节假日
   ```json
   {
-    "requestTime": "<请求时间>",
+    "requestTime": {
+      "text": "2023/5/1 10:38:28",
+      "timestamp": 1682908708000
+    },
+    "requestedDate": {
+      "timestamp": 1682908708000,
+      "day": "星期一",
+      "text": "2023/5/1 10:38:28"
+    },
     "todayIs": "off_day",
     "shouldIWorkToday": false,
-    "desc": "天气不错，出去散散步？"
+    "desc": "好想出去旅行啊"
   }
   ```
+  
 - 调休补班
   ```json
   {
-    "requestTime": "<请求时间>",
+    "requestTime": {
+      "text": "2023/6/25 10:38:28",
+      "timestamp": 1687660708000
+    },
+    "requestedDate": {
+      "timestamp": 1687660708000,
+      "day": "星期天",
+      "text": "2023/6/25 10:38:28"
+    },
     "todayIs": "not_off_day",
     "shouldIWorkToday": true,
-    "desc": "这个需求真的实现不了"
+    "desc": "今天摸哪里的鱼呢"
   }
   ```
 

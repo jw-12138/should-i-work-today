@@ -39,6 +39,16 @@ const at_home_sentences = [
   '喜欢一个人的时候，心情真的很好'
 ]
 
+const dayMap = {
+  0: '星期天',
+  1: '星期一',
+  2: '星期二',
+  3: '星期三',
+  4: '星期四',
+  5: '星期五',
+  6: '星期六'
+}
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
@@ -105,7 +115,7 @@ async function getRealTime() {
   let timestamp = Date.now()
   let timeObj = new Date(timestamp)
 
-  let timeText = timeObj.toLocaleString('cn-ZH', {
+  let timeText = timeObj.toLocaleString('zh-CN', {
     timeZone: 'Asia/Shanghai'
   })
 
@@ -114,16 +124,24 @@ async function getRealTime() {
   }
 }
 
-async function makeResponse() {
+async function makeResponse(type) {
   // get time
   console.log('getting time ...')
   let time = await getRealTime()
 
+  let timestamp = Date.parse(time.datetime)
+
+  if(type === 'tomorrow'){
+    // add one day to timestamp
+    timestamp += 1000 * 60 * 60 * 24
+  }
+
   // get date object from time
-  let dateObj = new Date(time.datetime)
+  let dateObj = new Date(timestamp)
 
   // get full year
   let fullYear = dateObj.getFullYear()
+  let day = dateObj.getDay()
 
   // get off days
   console.log('getting off days ...')
@@ -174,6 +192,13 @@ async function makeResponse() {
       text: time.datetime,
       timestamp: Date.parse(time.datetime)
     },
+    requestedDate: {
+      timestamp: timestamp,
+      day: dayMap[day],
+      text: dateObj.toLocaleString('zh-CN', {
+        timeZone: 'Asia/Shanghai'
+      })
+    },
     todayIs: resText,
     shouldIWorkToday: shouldIWork,
     desc: getRandomSentence(shouldIWork)
@@ -188,6 +213,12 @@ router.get('/', () => {
 
 router.get('/api/v1', async () => {
   let res = await makeResponse()
+
+  return json(res)
+})
+
+router.get('/api/v1/tomorrow', async () => {
+  let res = await makeResponse('tomorrow')
 
   return json(res)
 })
