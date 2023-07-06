@@ -110,9 +110,13 @@ async function getOffDays(year) {
   return thisYearOffDaysJson.days.concat(nextYearOffDaysJson.days)
 }
 
-async function getRealTime() {
+async function getRealTime(type) {
   let timestamp = Date.now()
   let timeObj = new Date(timestamp)
+
+  if (type === 'tomorrow') {
+    timeObj.setDate(timeObj.getDate() + 1)
+  }
 
   let timeText = timeObj.toLocaleString('zh-CN', {
     timeZone: 'Asia/Shanghai'
@@ -126,14 +130,9 @@ async function getRealTime() {
 async function makeResponse(type) {
   // get time
   console.log('getting time ...')
-  let time = await getRealTime()
+  let time = await getRealTime(type)
 
   let timestamp = Date.parse(time.datetime)
-
-  if (type === 'tomorrow') {
-    // add one day to timestamp
-    timestamp += 1000 * 60 * 60 * 24
-  }
 
   // get date object from timestamp
   let dateObj = new Date(timestamp)
@@ -194,7 +193,7 @@ async function makeResponse(type) {
     requestedDate: {
       timestamp: timestamp,
       day: dayMap[day],
-      text: dateObj.toLocaleString('zh-CN', {
+      text: new Date(timestamp).toLocaleString('zh-CN', {
         timeZone: 'Asia/Shanghai'
       })
     },
