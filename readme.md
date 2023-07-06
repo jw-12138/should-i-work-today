@@ -2,7 +2,7 @@
 
 ## 这是啥？
 
-这是一个部署在 [Cloudflare workers](https://workers.cloudflare.com/) 上的 API，它会根据中国国务院发布的数据来确定今天是节假日还是补班。可以用在一些需要自动化的场景。
+这是一个部署在 [Cloudflare workers](https://workers.cloudflare.com/) 上的 API，它会根据中国国务院发布的数据来确定今天是节假日还是补班，可以用在一些需要自动化的场景。
 
 API 地址：
 
