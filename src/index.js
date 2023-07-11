@@ -111,20 +111,29 @@ async function getOffDays(year) {
 }
 
 async function getRealTime(type) {
-  let timestamp = Date.now()
-  let timeObj = new Date(timestamp)
-
-  if (type === 'tomorrow') {
-    timeObj.setDate(timeObj.getDate() + 1)
+  let remoteTime = await fetch('https://timeapi.io/api/TimeZone/zone?timeZone=Asia/Shanghai')
+  if(remoteTime.status !== 200){
+    throw new Error('获取时间失败')
   }
+  let remoteTimeJson = await remoteTime.json()
 
-  let timeText = timeObj.toLocaleString('zh-CN', {
-    timeZone: 'Asia/Shanghai'
-  })
+  let dateObj = new Date(remoteTimeJson.currentLocalTime)
+
+  if(type === 'tomorrow'){
+    dateObj.setDate(dateObj.getDate() + 1)
+  }
 
   return {
-    datetime: timeText
+    datetime: dateObj.toLocaleString('zh-CN')
   }
+}
+
+function addZero(num){
+  if(num < 10){
+    return '0' + num
+  }
+
+  return num
 }
 
 async function makeResponse(type) {
@@ -146,7 +155,7 @@ async function makeResponse(type) {
   let offDays = await getOffDays(fullYear)
 
   // yyyy-MM-dd
-  let today = dateObj.toISOString().split('T')[0]
+  let today = dateObj.getFullYear() + '-' + addZero(dateObj.getMonth() + 1) + '-' + addZero(dateObj.getDate())
 
   let todayIsOffDay = null
   offDays.forEach((day) => {
@@ -187,15 +196,13 @@ async function makeResponse(type) {
 
   return {
     requestTime: {
-      text: time.datetime,
-      timestamp: Date.parse(time.datetime)
+      text: new Date().toLocaleString('zh-CN'),
+      timestamp: Date.now()
     },
     requestedDate: {
       timestamp: timestamp,
       day: dayMap[day],
-      text: new Date(timestamp).toLocaleString('zh-CN', {
-        timeZone: 'Asia/Shanghai'
-      })
+      text: time.datetime
     },
     todayIs: resText,
     shouldIWorkToday: shouldIWork,
