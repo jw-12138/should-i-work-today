@@ -9,7 +9,17 @@ const app = new Hono<{ Bindings: Env }>()
 app.use('*', cors())
 
 app.get('/', (c) => {
-  return c.redirect('https://github.com/jw-12138/should-i-work-today', 301)
+  const text = `Should I Work Today?
+
+中国节假日工作日判断 API
+
+API:
+  GET /api/v2           - 今天是否需要上班
+  GET /api/v2/tomorrow  - 明天是否需要上班
+
+Source: https://github.com/jw-12138/should-i-work-today
+`
+  return c.text(text)
 })
 
 // v1 接口
