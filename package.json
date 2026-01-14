@@ -4,9 +4,15 @@
   "license": "MIT",
   "scripts": {
     "dev": "wrangler dev --port 4011",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "sync-secrets": "bash scripts/sync-secrets.sh",
+    "typegen": "bunx wrangler types"
   },
   "dependencies": {
-    "itty-router": "^4.0.13"
+    "@upstash/redis": "^1.36.1",
+    "hono": "^4.11.4"
+  },
+  "devDependencies": {
+    "wrangler": "^4.59.1"
   }
 }
