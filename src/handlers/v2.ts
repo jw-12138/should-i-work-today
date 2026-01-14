@@ -43,6 +43,6 @@ export async function makeResponseV2(redis: Redis | null, type?: string): Promis
       day: dayMap[day],
       text: time.datetime
     },
-    shouldIWorkToday: shouldIWork
+    needToWork: shouldIWork
   }
 }

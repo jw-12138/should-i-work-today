@@ -29,6 +29,6 @@ export interface ApiResponseV1 {
 
 export interface ApiResponseV2 {
   requestedDate: RequestedDate
-  shouldIWorkToday: boolean
+  needToWork: boolean
 }
 

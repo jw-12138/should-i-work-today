@@ -29,7 +29,7 @@ GET /api/v2/tomorrow
     "day": "星期三",
     "text": "2026/1/14 15:17:59"
   },
-  "shouldIWorkToday": true
+  "needToWork": true
 }
 ```
 
@@ -40,7 +40,7 @@ GET /api/v2/tomorrow
 | `requestedDate.timestamp` | number | 查询日期的时间戳（毫秒） |
 | `requestedDate.day` | string | 星期几 |
 | `requestedDate.text` | string | 格式化的日期时间 |
-| `shouldIWorkToday` | boolean | 是否为工作日 |
+| `needToWork` | boolean | 是否为工作日 |
 
 ### 旧版接口
 
