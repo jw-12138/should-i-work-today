@@ -13,6 +13,7 @@
     "hono": "^4.11.4"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260114.0",
     "wrangler": "^4.59.1"
   }
 }
