@@ -6,14 +6,15 @@
     "dev": "wrangler dev --port 4011",
     "deploy": "wrangler deploy",
     "sync-secrets": "bash scripts/sync-secrets.sh",
-    "typegen": "bunx wrangler types"
+    "typegen": "wrangler types",
+    "typecheck": "tsc"
   },
   "dependencies": {
-    "@upstash/redis": "^1.36.1",
-    "hono": "^4.11.4"
+    "@upstash/redis": "^1.39.0",
+    "hono": "^4.13.13"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20260114.0",
-    "wrangler": "^4.59.1"
+    "typescript": "^7.0.2",
+    "wrangler": "^4.149.0"
   }
 }
